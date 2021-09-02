@@ -28,8 +28,6 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
-
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
     Using DOM methods and properties, create and return the following markup:
@@ -58,3 +56,92 @@ const followersArray = [];
     luishrd
     bigknell
 */
+
+import axios from 'axios'
+
+
+const entrypoint = document.querySelector('.cards');
+
+const dataUrl = 'https://api.github.com/users/Elijah-Angell';
+
+const Data = () => {
+  axios.get(dataUrl)
+    .then(res => {
+      entrypoint.appendChild(gitCard(res));
+    })
+    .catch(err => {
+      console.log('error')
+    })
+    .finally(() => console.log('done'))
+}
+Data()
+
+
+
+function gitCard(object) {
+
+  const cards = document.createElement('div')
+  const img = document.createElement('img')
+  const cardInfo = document.createElement('div')
+  const name = document.createElement('h3')
+  const userName = document.createElement('p')
+  const Location = document.createElement('p')
+  const Profile = document.createElement('p')
+  const address = document.createElement('a')
+  const followers = document.createElement('p')
+  const following = document.createElement('p')
+  const bios = document.createElement('p')
+
+  cards.classList.add('card')
+  cardInfo.classList.add('card-info')
+  name.classList.add('name')
+  userName.classList.add('username')
+
+
+  img.src = object.data.avatar_url;
+  name.textContent = object.data.name;
+  userName.textContent = object.data.login;
+  Location.textContent = (`Location: ${object.data.location}`);
+  Profile.textContent = (`Profile: ${object.data.html_url}`);
+  address.href = object.data.html_url;
+  followers.textContent = (`Followers: ${object.data.followers}`);
+  following.textContent = (`Following: ${object.data.following}`);
+  bios.textContent = (`Bios: ${object.data.bio}`)
+
+  cards.appendChild(img)
+  cards.appendChild(cardInfo)
+  cardInfo.appendChild(name)
+  cardInfo.appendChild(userName)
+  cardInfo.appendChild(Location)
+  cardInfo.appendChild(Profile)
+  Profile.appendChild(address)
+  cardInfo.appendChild(followers)
+  cardInfo.appendChild(following)
+  cardInfo.appendChild(bios);
+
+
+  return cards
+
+
+
+}
+
+object.forEach(e => {
+  const cards = gitCard(e);
+  document.querySelector('.cards').appendChild(cards)
+})
+
+
+const followersArray = 'https://api.github.com/users/Elijah-Angell/followers'
+
+
+const followers = () => {
+  axios.get(followersArray)
+    .then(res => {
+      entrypoint.appendChild(gitCard(res))
+    })
+    .catch(err => {
+      console.log("error")
+    })
+}
+followers(gitCard(1))
